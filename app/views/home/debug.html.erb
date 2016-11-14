@@ -1,0 +1,7 @@
+<% @twitter_users.each do |twitter_user| %>
+  <h1>(<%= twitter_user.overall_sentiment %>, <%= twitter_user.overall_probability %>) <%= twitter_user.twitter_screen_name %></h1>
+  <% twitter_user.tweets.each do |t| %>
+    <p><%= t[:text] %></p>
+  <% end %>
+  <hr />
+<% end %>
