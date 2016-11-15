@@ -42,6 +42,10 @@ const config = {
         loader: 'babel-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.(gif|png|jpg|woff|woff2|eot|ttf)$/,
+        loader: 'url-loader?limit=100000'
+      },
     ],
   },
 };

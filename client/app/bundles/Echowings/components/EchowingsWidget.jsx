@@ -1,41 +1,69 @@
-// HelloWorldWidget is an arbitrary name for any "dumb" component. We do not recommend suffixing
-// all your dumb component names with Widget.
+import React, { Component, PropTypes } from 'react';
+import flag from '../../../../assets/flag.gif';
+import logo from '../../../../assets/logo.svg';
+import vudu from 'vudu';
 
-import React, { PropTypes } from 'react';
+const c = vudu.atomics;
 
-// Simple example of a React "dumb" component
-export default class EchowingsWidget extends React.Component {
+const styles = vudu({
+  container: {
+    height: '100%',
+    backgroundImage: `url(assets/${flag})`,
+    backgroundSize: 'cover',
+    '@composes': [ 
+      c.fixed, 
+      c.top0, 
+      c.left0,
+      c.bgBlack,
+      c.col12
+    ],
+    ':after': {
+      content: '""',
+      height: '100%',
+      backgroundColor: 'rgba(0,0,0,.5)',
+      '@composes': [
+        c.absolute,
+        c.top0,
+        c.left0,
+        c.col12,
+        c.block
+      ]
+    }
+  },
+  border: {
+    height: '100%',
+    boxShadow: 'inset 0 0 0 100px white',
+    pointerEvents: 'none',
+    '@composes': [
+      c.col12,
+      c.fixed,
+      c.top0,
+      c.left0,
+      c.z1,
+      c.relative
+    ]
+  },
+  logo: {
+    left: '50%',
+    transform: 'translateX(-50%)',
+    top: '2rem',
+    '@composes': [
+      c.absolute,
+    ]
+  }
+});
+
+export default class EchowingsWidget extends Component {
   static propTypes = {
-    // If you have lots of data or action properties, you should consider grouping them by
-    // passing two properties: "data" and "actions".
-    updateName: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
   };
 
-  // React will automatically provide us with the event `e`
-  handleChange(e) {
-    const name = e.target.value;
-    this.props.updateName(name);
-  }
-
   render() {
-    const { name } = this.props;
     return (
-      <div className="container">
-        <h3>
-          Hello, {name}!
-        </h3>
-        <hr />
-        <form className="form-horizontal">
-          <label>
-            Say hello to:
-          </label>
-          <input
-            type="text"
-            value={name}
-            onChange={e => this.handleChange(e)}
-          />
-        </form>
+      <div className={styles.container}>
+        <div className={styles.border}>
+          <img className={styles.logo} src={logo} />
+        </div>
       </div>
     );
   }
