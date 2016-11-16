@@ -19,6 +19,8 @@ const Tramuntana = vudu.addFontFace({
 
 const c = vudu.atomics;
 
+const md = '@media (min-width: 48em)';
+
 const styles = vudu({
   wrapper: {
     fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
@@ -50,7 +52,7 @@ const styles = vudu({
   },
   border: {
     height: '100%',
-    boxShadow: 'inset 0 0 0 100px white',
+    boxShadow: 'inset 0 0 0 10px white',
     pointerEvents: 'none',
     '@composes': [
       c.col12,
@@ -59,14 +61,27 @@ const styles = vudu({
       c.left0,
       c.z2
     ],
+    [md]: {
+      boxShadow: 'inset 0 0 0 100px white',
+    }
+  },
+  header: {
+    backgroundColor: 'white',
+    height: '4rem',
+    '@composes': [
+      c.absolute,
+      c.left0,
+      c.top0,
+      c.col12
+    ],
     'h5': {
       left: '50%',
       transform: 'translateX(-50%)',
       fontWeight: '500',
       letterSpacing: '.2em',
-      paddingTop: '2.5rem',
+      marginTop: '-.3rem',
+      marginBottom: 0,
       '@composes': [
-        c.m0,
         c.absolute,
         c.caps,
       ],
@@ -83,46 +98,68 @@ const styles = vudu({
           c.inlineBlock,
           c.relative
         ]
+      },
+      [md]: {
+        marginTop: '.7rem'
       }
+    },
+    [md]: {
+      backgroundColor: 'transparent',
+      height: 'auto',
     }
   },
   title: {
     fontFamily: '"Tramuntana", serif',
-    fontSize: '5rem',
+    fontSize: '3rem',
     marginTop: '-3rem',
     '@composes': [
       c.mb3
-    ]
+    ],
+    [md]: {
+      fontSize: '5rem',
+    }
   },
   logo: {
     left: '50%',
     transform: 'translateX(-50%)',
-    top: '2.25rem',
+    top: '1.25rem',
     '@composes': [
-      c.absolute,
-    ]
+      c.relative,
+    ],
+    [md]: {
+      top: '2.25rem',
+    }
   },
   content: {
+    paddingTop: '4rem',
     '@composes': [
       c.white,
       c.relative,
       c.mxAuto,
-      c.col8,
+      c.col10,
+      c.mdCol8,
       c.z1,
     ],
     'p': {
       lineHeight: '1.6',
       '@composes': [
-        c.col6,
+        c.mdCol6,
       ]
+    },
+    [md]: {
+      paddingTop: 0
     }
   },
   panel: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: '100vh',
-    borderBottom: '1px solid rgba(255,255,255,.75)'
+    borderBottom: '1px solid rgba(255,255,255,.75)',
+    padding: '6rem 0',
+    [md]: {
+      height: '100vh',
+      padding: 0
+    }
   },
   actionBar: {
     '@composes': [
@@ -205,7 +242,8 @@ const styles = vudu({
   third: {
     '@composes': [
       c.left,
-      c.col4,
+      c.mdCol4,
+
     ],
     'h2': {
       fontFamily: '"Tramuntana", serif',
@@ -222,13 +260,17 @@ const styles = vudu({
     bottom: '4.25rem',
     border: '3px solid currentColor',
     cursor: 'pointer',
+    display: 'none',
     '@composes': [
       c.fixed,
       c.bgWhite,
       c.py2,
       c.px4,
       c.z4,
-    ]
+    ],
+    [md]: {
+      display: 'block'
+    }
   }
 });
 
@@ -308,11 +350,13 @@ export default class EchowingsWidget extends Component {
           </div>
         </div>
         <div className={styles.border}>
-          <img className={styles.logo} src={logo} />
-          <h5>
-            <span>Echo</span>
-            <span>Wings</span>
-          </h5>
+          <div className={styles.header}>
+            <img className={styles.logo} src={logo} />
+            <h5>
+              <span>Echo</span>
+              <span>Wings</span>
+            </h5>
+          </div>
         </div>
         <div className={styles.down}>
           <img src={down} />
