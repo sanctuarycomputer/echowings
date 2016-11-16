@@ -7,6 +7,11 @@ import woff2 from '../../../../assets/Tramuntana-Heavy.woff2';
 import woff from '../../../../assets/Tramuntana-Heavy.woff';
 import ttf from '../../../../assets/Tramuntana-Heavy.ttf';
 import vudu from 'vudu';
+import Scroll from 'react-scroll';
+import Waypoint from 'react-waypoint';
+
+const Link = Scroll.Link;
+const Element = Scroll.Element;
 
 const Tramuntana = vudu.addFontFace({  
   fontFamily: 'Tramuntana',
@@ -106,8 +111,6 @@ const styles = vudu({
     '@composes': [
       c.white,
       c.relative,
-      c.mxAuto,
-      c.col8,
       c.z1,
     ],
     'p': {
@@ -122,7 +125,13 @@ const styles = vudu({
     alignItems: 'center',
     justifyContent: 'center',
     height: '100vh',
-    borderBottom: '1px solid rgba(255,255,255,.75)'
+    borderBottom: '1px solid rgba(255,255,255,.5)'
+  },
+  container: {
+    '@composes': [
+      c.mxAuto,
+      c.col8
+    ]
   },
   actionBar: {
     '@composes': [
@@ -241,7 +250,8 @@ export default class EchowingsWidget extends Component {
     super(props);
     this.state = { 
       selectValue: 'Select leaning',
-      selectTouched: false
+      selectTouched: false,
+      showDownArrow: true,
     }
   }
 
@@ -249,6 +259,12 @@ export default class EchowingsWidget extends Component {
     this.setState({
       selectValue: e.target.value,
       selectTouched: true
+    });
+  }
+
+  handleDownArrow() {
+    this.setState({
+      showDownArrow: this.state.showDownArrow ? false : true
     });
   }
 
@@ -265,44 +281,50 @@ export default class EchowingsWidget extends Component {
         <div className={styles.bg}></div>
         <div className={styles.content}>
           <div className={styles.panel}>
-            <div>
-            <h1 className={styles.title}>
-              <span>{'Break out of your'}</span><br />
-              <span>{'echo chamber'}</span>
-            </h1>
-            <p>{'Echowings uses Natural Language Processing to interpret the sentiment of 82,183 Twitter users (and counting) directly following the 2016 US Presidential Election.  As a means of diversifying your “political echo chamber”, Echowings uses this dataset to send monthly suggestions for accounts with an opposing political leaning to your own.'}</p>
+            <div className={styles.container}>
+              <h1 className={styles.title}>
+                <span>{'Break out of your'}</span><br />
+                <span>{'echo chamber'}</span>
+              </h1>
+              <p>{'Echowings uses Natural Language Processing to interpret the sentiment of 82,183 Twitter users (and counting) directly following the 2016 US Presidential Election.  As a means of diversifying your “political echo chamber”, Echowings uses this dataset to send monthly suggestions for accounts with an opposing political leaning to your own.'}</p>
             </div>
           </div>
+          <Element name="signup">
+            <div className={styles.panel}>
+              <div className={styles.container}>
+                <form className={styles.actionBar}>
+                  <label>{'My email is:'}</label>
+                  <input type='text' placeholder={'me@example.com'} />
+                  <label>{'My political leaning is:'}</label>
+                  <div className={styles.select}>
+                    <span className={statefulStyle.select}>{this.state.selectValue}</span>
+                    <select onChange={this.changeSelectText}>
+                      <option selected>—</option>
+                      <option>Left-wing Liberal</option>
+                      <option>Right-wing Conservative</option>
+                      <option>Independent</option>
+                    </select>
+                    <img src={selectarrow} />
+                  </div>
+                  <div className={styles.center}>
+                    <button type='submit'>{'I want to “get” America'}</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </Element>
           <div className={styles.panel}>
-            <form className={styles.actionBar}>
-              <label>{'My email is:'}</label>
-              <input type='text' placeholder={'me@example.com'} />
-              <label>{'My political leaning is:'}</label>
-              <div className={styles.select}>
-                <span className={statefulStyle.select}>{this.state.selectValue}</span>
-                <select onChange={this.changeSelectText}>
-                  <option selected>—</option>
-                  <option>Left-wing Liberal</option>
-                  <option>Right-wing Conservative</option>
-                  <option>Independent</option>
-                </select>
-                <img src={selectarrow} />
-              </div>
-              <div className={styles.center}>
-                <button type='submit'>{'I want to “get” America'}</button>
-              </div>
-            </form>
-          </div>
-          <div className={styles.panel}>
-            <div className={styles.lastPanel}>
-              <div className={styles.third}>
-                <h2><a href='#'>{'A project by Sanctuary Computer.'}</a></h2>
-              </div>
-              <div className={styles.third}>
-                <h2><a href='#'>{'Contribute to Echowings on Github.'}</a></h2>
-              </div>
-              <div className={styles.third}>
-                <h2><a href='#'>{'A project by NYC’s Sanctuary Computer.'}</a></h2>
+            <div className={styles.container}>
+              <div className={styles.lastPanel}>
+                <div className={styles.third}>
+                  <h2><a href='#'>{'A project by Sanctuary Computer.'}</a></h2>
+                </div>
+                <div className={styles.third}>
+                  <h2><a href='#'>{'Contribute to Echowings on Github.'}</a></h2>
+                </div>
+                <div className={styles.third}>
+                  <h2><a href='#'>{'A project by NYC’s Sanctuary Computer.'}</a></h2>
+                </div>
               </div>
             </div>
           </div>
@@ -314,9 +336,13 @@ export default class EchowingsWidget extends Component {
             <span>Wings</span>
           </h5>
         </div>
-        <div className={styles.down}>
-          <img src={down} />
-        </div>
+        <Link to="signup" smooth={true} duration={500}>
+          {this.state.showDownArrow &&
+            <div className={styles.down}>
+              <img src={down} />
+            </div>
+          }
+        </Link>
       </div>
     );
   }

@@ -35,6 +35,8 @@
   },
   "devDependencies": {
     "file-loader": "^0.9.0",
+    "react-scroll": "^1.4.4",
+    "react-waypoint": "^4.0.4",
     "url-loader": "^0.5.7"
   }
 }
