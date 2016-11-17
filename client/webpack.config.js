@@ -25,6 +25,9 @@ const config = {
       'react-dom': path.resolve('./node_modules/react-dom'),
     },
   },
+  resolveLoader: {
+    root: path.join(__dirname, 'node_modules')
+  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
