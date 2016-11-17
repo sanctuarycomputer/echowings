@@ -9,6 +9,7 @@ const config = {
     'es5-shim/es5-shim',
     'es5-shim/es5-sham',
     'babel-polyfill',
+    'whatwg-fetch',
     './app/bundles/Echowings/startup/EchowingsApp',
   ],
 
@@ -43,7 +44,7 @@ const config = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(gif|png|jpg|woff|woff2|eot|ttf)$/,
+        test: /\.(gif|svg|png|jpg|woff|woff2|eot|ttf)$/,
         loader: 'url-loader?limit=100000'
       },
     ],

@@ -8,7 +8,7 @@ import woff from '../../../../assets/Tramuntana-Heavy.woff';
 import ttf from '../../../../assets/Tramuntana-Heavy.ttf';
 import vudu from 'vudu';
 
-const Tramuntana = vudu.addFontFace({  
+const Tramuntana = vudu.addFontFace({
   fontFamily: 'Tramuntana',
   src: `url(assets/${woff2}) format("woff2"),
     url(assets/${woff}) format("woff"),
@@ -30,9 +30,9 @@ const styles = vudu({
     height: '100%',
     backgroundImage: `url(assets/${flag})`,
     backgroundSize: 'cover',
-    '@composes': [ 
-      c.fixed, 
-      c.top0, 
+    '@composes': [
+      c.fixed,
+      c.top0,
       c.left0,
       c.bgBlack,
       c.col12
@@ -86,14 +86,14 @@ const styles = vudu({
         c.caps,
       ],
       'span:nth-child(1)': {
-        '@composes': [ 
+        '@composes': [
           c.pr4,
           c.inlineBlock,
         ]
       },
       'span:nth-child(2)': {
         left: '1rem',
-        '@composes': [ 
+        '@composes': [
           c.pl4,
           c.inlineBlock,
           c.relative
@@ -274,28 +274,61 @@ const styles = vudu({
   }
 });
 
-export default class EchowingsWidget extends Component {
-  static propTypes = {
-    name: PropTypes.string.isRequired,
-  };
+const SELECT_OPTIONS = [
+  {
+    label: '-',
+    value: ''
+  },
+  {
+    label: 'Left-wing Liberal',
+    value: 'left'
+  },
+  {
+    label: 'Right-wing Conservative',
+    value: 'right'
+  },
+  {
+    label: 'Independent',
+    value: 'middle'
+  }
+];
 
+export default class EchowingsWidget extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      selectValue: 'Select leaning',
-      selectTouched: false
+    this.state = {
+      selectLabel: SELECT_OPTIONS[0].label,
+      selectValue: SELECT_OPTIONS[0].value,
+      selectTouched: false,
+      emailAddress: ''
     }
   }
 
-  changeSelectText(e) {
+  submitWing = e => {
+    e.preventDefault();
+    this.props.submitWing(this.state.emailAddress, this.state.selectValue);
+  }
+
+  changeEmail = e => {
+    this.setState({ emailAddress: e.target.value });
+  }
+
+  changeSelectText = e => {
+    let option = e.target.options[e.target.selectedIndex];
     this.setState({
-      selectValue: e.target.value,
+      selectLabel: option.label,
+      selectValue: option.value,
       selectTouched: true
     });
   }
 
-  render() {
+  renderOptions() {
+    return SELECT_OPTIONS.map((item, index) => {
+      return <option key={index} value={item.value} label={item.label}></option>
+    });
+  }
 
+  render() {
     const statefulStyle = vudu({
       select: {
         color: this.state.selectTouched ? 'red' : 'silver'
@@ -316,17 +349,14 @@ export default class EchowingsWidget extends Component {
             </div>
           </div>
           <div className={styles.panel}>
-            <form className={styles.actionBar}>
+            <form className={styles.actionBar} onSubmit={this.submitWing}>
               <label>{'My email is:'}</label>
-              <input type='text' placeholder={'me@example.com'} />
+              <input type='text' placeholder={'me@example.com'} onChange={this.changeEmail} />
               <label>{'My political leaning is:'}</label>
               <div className={styles.select}>
-                <span className={statefulStyle.select}>{this.state.selectValue}</span>
+                <span className={statefulStyle.select}>{this.state.selectLabel}</span>
                 <select onChange={this.changeSelectText}>
-                  <option selected>—</option>
-                  <option>Left-wing Liberal</option>
-                  <option>Right-wing Conservative</option>
-                  <option>Independent</option>
+                  {this.renderOptions()}
                 </select>
                 <img src={selectarrow} />
               </div>

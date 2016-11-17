@@ -56,6 +56,8 @@ GEM
     debug_inspector (0.0.2)
     domain_name (0.5.20161021)
       unf (>= 0.0.5, < 1.0.0)
+    email_validator (1.6.0)
+      activemodel
     equalizer (0.0.10)
     erubis (2.7.0)
     execjs (2.7.0)
@@ -211,6 +213,7 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 4.1.0)
+  email_validator
   jquery-rails
   listen (~> 3.0.5)
   mini_racer
