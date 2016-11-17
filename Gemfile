@@ -4,7 +4,7 @@ gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
 gem 'pg'
 gem 'puma', '~> 3.0'
 
-gem '12factor'
+gem 'rails_12factor'
 gem 'email_validator'
 gem 'react_on_rails', '~> 6'
 gem 'sass-rails', '~> 5.0'
