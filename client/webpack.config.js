@@ -9,6 +9,7 @@ const config = {
     'es5-shim/es5-shim',
     'es5-shim/es5-sham',
     'babel-polyfill',
+    'whatwg-fetch',
     './app/bundles/Echowings/startup/EchowingsApp',
   ],
 
@@ -23,6 +24,9 @@ const config = {
       react: path.resolve('./node_modules/react'),
       'react-dom': path.resolve('./node_modules/react-dom'),
     },
+  },
+  resolveLoader: {
+    root: path.join(__dirname, 'node_modules')
   },
   plugins: [
     new webpack.DefinePlugin({

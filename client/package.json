@@ -31,12 +31,12 @@
     "react-dom": "^0.14.8 || ^15.0.0",
     "react-on-rails": "6.1.2",
     "vudu": "^1.8.5",
-    "webpack": "^1.12.14"
+    "webpack": "^1.12.14",
+    "whatwg-fetch": "^2.0.0"
   },
   "devDependencies": {
     "file-loader": "^0.9.0",
     "react-scroll": "^1.4.4",
-    "react-waypoint": "^4.0.4",
     "url-loader": "^0.5.7"
   }
 }

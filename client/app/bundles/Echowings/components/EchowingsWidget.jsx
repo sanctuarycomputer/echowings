@@ -2,18 +2,48 @@ import React, { Component, PropTypes } from 'react';
 import flag from '../../../../assets/flag.gif';
 import logo from '../../../../assets/logo.svg';
 import down from '../../../../assets/down.svg';
+import donkey from '../../../../assets/donkey.svg';
+import elephant from '../../../../assets/elephant.svg';
 import selectarrow from '../../../../assets/selectarrow.svg';
 import woff2 from '../../../../assets/Tramuntana-Heavy.woff2';
 import woff from '../../../../assets/Tramuntana-Heavy.woff';
 import ttf from '../../../../assets/Tramuntana-Heavy.ttf';
 import vudu from 'vudu';
 import Scroll from 'react-scroll';
-import Waypoint from 'react-waypoint';
 
 const Link = Scroll.Link;
 const Element = Scroll.Element;
 
-const Tramuntana = vudu.addFontFace({  
+const tweetLink = "https://twitter.com/home?status=I'm%20getting%20to%20know%20america%20via%20https%3A//www.echowings.org%20%23echowings";
+
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function validateEmail(email) {
+  let re = /(.+)@(.+){2,}\.(.+){2,}/;
+  return re.test(email);
+}
+
+const type = {
+  letterSpacing: '1px',
+  fontWeight: '300',
+  lineHeight: '1.8rem'
+};
+
+const buttonType = {
+  letterSpacing: '1px',
+  fontWeight: '600',
+  fontSize: '14px',
+  width: '100%'
+};
+
+const vertCenter = {
+  top: '50%',
+  transform: 'translateY(-50%)'
+};
+
+const Tramuntana = vudu.addFontFace({
   fontFamily: 'Tramuntana',
   src: `url(assets/${woff2}) format("woff2"),
     url(assets/${woff}) format("woff"),
@@ -24,18 +54,38 @@ const Tramuntana = vudu.addFontFace({
 
 const c = vudu.atomics;
 
+const md = '@media (min-width: 54em)';
+
 const styles = vudu({
   wrapper: {
     fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
     '*': { boxSizing: 'border-box' }
   },
+  textLink: {
+    color: 'white'
+  },
+  input: {
+    outline: 'none',
+    '@composes': [type]
+  },
+  selectLabel: {
+    '@composes': [type]
+  },
+  validButton: {
+    pointerEvents: 'auto',
+    '@composes': [c.bgWhite]
+  },
+  invalidButton: {
+    pointerEvents: 'none',
+    opacity: '0.4'
+  },
   bg: {
     height: '100%',
     backgroundImage: `url(assets/${flag})`,
     backgroundSize: 'cover',
-    '@composes': [ 
-      c.fixed, 
-      c.top0, 
+    '@composes': [
+      c.fixed,
+      c.top0,
       c.left0,
       c.bgBlack,
       c.col12
@@ -55,7 +105,7 @@ const styles = vudu({
   },
   border: {
     height: '100%',
-    boxShadow: 'inset 0 0 0 100px white',
+    boxShadow: 'inset 0 0 0 10px white',
     pointerEvents: 'none',
     '@composes': [
       c.col12,
@@ -64,74 +114,106 @@ const styles = vudu({
       c.left0,
       c.z2
     ],
+    [md]: {
+      boxShadow: 'inset 0 0 0 100px white',
+    }
+  },
+  header: {
+    backgroundColor: 'white',
+    height: '4rem',
+    '@composes': [
+      c.absolute,
+      c.left0,
+      c.top0,
+      c.col12
+    ],
     'h5': {
       left: '50%',
       transform: 'translateX(-50%)',
       fontWeight: '500',
       letterSpacing: '.2em',
-      paddingTop: '2.5rem',
+      marginTop: '-.3rem',
+      marginBottom: 0,
       '@composes': [
-        c.m0,
         c.absolute,
         c.caps,
       ],
       'span:nth-child(1)': {
-        '@composes': [ 
+        '@composes': [
           c.pr4,
           c.inlineBlock,
         ]
       },
       'span:nth-child(2)': {
         left: '1rem',
-        '@composes': [ 
+        '@composes': [
           c.pl4,
           c.inlineBlock,
           c.relative
         ]
+      },
+      [md]: {
+        marginTop: '.7rem'
       }
+    },
+    [md]: {
+      backgroundColor: 'transparent',
+      height: 'auto',
     }
   },
   title: {
     fontFamily: '"Tramuntana", serif',
-    fontSize: '5rem',
+    fontSize: '3rem',
     marginTop: '-3rem',
     '@composes': [
       c.mb3
-    ]
+    ],
+    [md]: {
+      fontSize: '5rem',
+    }
   },
   logo: {
     left: '50%',
     transform: 'translateX(-50%)',
-    top: '2.25rem',
+    top: '1.25rem',
     '@composes': [
-      c.absolute,
-    ]
+      c.relative,
+    ],
+    [md]: {
+      top: '2.25rem',
+    }
   },
   content: {
+    paddingTop: '4rem',
     '@composes': [
       c.white,
       c.relative,
+      c.mxAuto,
+      c.col10,
+      c.mdCol8,
       c.z1,
     ],
     'p': {
-      lineHeight: '1.6',
       '@composes': [
-        c.col6,
+        c.mdCol6, 
+        type
       ]
+    },
+    [md]: {
+      paddingTop: 0
     }
   },
   panel: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: '100vh',
-    borderBottom: '1px solid rgba(255,255,255,.5)'
-  },
-  container: {
-    '@composes': [
-      c.mxAuto,
-      c.col8
-    ]
+    padding: '6rem 0',
+    maxWidth: '64rem',
+    '@composes': [ c.mxAuto ],
+    [md]: {
+      height: '100vh',
+      padding: 0
+    }
   },
   actionBar: {
     '@composes': [
@@ -172,17 +254,21 @@ const styles = vudu({
       ]
     },
     'button': {
+      outline: 'none',
       border: 0,
       fontFamily: 'inherit',
       cursor: 'pointer',
+      transition: '1s opacity',
       '@composes': [
-        c.bgWhite,
         c.py2,
         c.px4,
         c.mt5,
         c.caps,
-        c.h3
-      ]
+        buttonType
+      ],
+      [md]: {
+        width: 'auto'
+      }
     }
   },
   select: {
@@ -196,30 +282,34 @@ const styles = vudu({
       c.col12
     ],
     'img': {
-      marginTop: '1.25rem',
       '@composes': [
         c.absolute,
         c.right0,
         c.top0,
-        c.mx3,
+        c.m3,
       ]
     }
   },
   center: {
     '@composes': [ c.center ]
   },
-  lastPanel: {
-    '@composes': [ c.col12 ]
-  },
   third: {
     '@composes': [
       c.left,
-      c.col4,
+      c.mdCol4,
     ],
     'h2': {
       fontFamily: '"Tramuntana", serif',
       letterSpacing: '.05em',
-      '@composes': [ c.pr5 ]
+      padding: 0,
+      '@composes': [ 
+        c.mt0, 
+        c.mb5 
+      ],
+      [md]: {
+        padding: '0 2rem',
+        margin: 0
+      }
     },
     'a': {
       '@composes': [ c.white ]
@@ -231,28 +321,118 @@ const styles = vudu({
     bottom: '4.25rem',
     border: '3px solid currentColor',
     cursor: 'pointer',
+    display: 'none',
     '@composes': [
       c.fixed,
       c.bgWhite,
       c.py2,
       c.px4,
       c.z4,
-    ]
+    ],
+    [md]: {
+      display: 'block'
+    }
+  },
+  donkey: {
+    display: 'none',
+    '@composes': [
+      vertCenter,
+      c.absolute,
+      c.left0,
+      c.mx3,
+    ],
+    [md]: {
+      '@composes': [
+        c.block
+      ]
+    }
+  },
+  elephant: {
+    display: 'none',
+    '@composes': [
+      vertCenter,
+      c.absolute,
+      c.right0,
+      c.mx3,
+    ],
+    [md]: {
+      '@composes': [
+        c.block
+      ]
+    }
+  },
+  flip: {
+    transform: 'rotate(180deg)'
   }
 });
 
-export default class EchowingsWidget extends Component {
-  static propTypes = {
-    name: PropTypes.string.isRequired,
-  };
+const SELECT_OPTIONS = [
+  {
+    label: '-',
+    value: ''
+  },
+  {
+    label: 'Left-wing Liberal',
+    value: 'left'
+  },
+  {
+    label: 'Right-wing Conservative',
+    value: 'right'
+  },
+  {
+    label: 'Independent',
+    value: 'middle'
+  }
+];
 
+export default class EchowingsWidget extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      selectValue: 'Select leaning',
+    this.state = {
+      selectLabel: SELECT_OPTIONS[0].label,
+      selectValue: SELECT_OPTIONS[0].value,
       selectTouched: false,
+      emailAddress: '',
+      entryIsValid: false,
       showDownArrow: true,
+      showUpArrow: false,
     }
+  }
+
+  scrollToTop() {
+    scroll.scrollTo(100);
+  }
+
+  submitWing = e => {
+    e.preventDefault();
+    this.props.submitWing(this.state.emailAddress, this.state.selectValue);
+  }
+
+  validateInputs = () => {
+    let emailIsValid = validateEmail(this.state.emailAddress);
+    let selectIsValid = this.state.selectValue.length > 0;
+    this.setState({ entryIsValid: [emailIsValid, selectIsValid].every(truthy => truthy) });
+  }
+
+  changeEmail = e => {
+    this.setState({ emailAddress: e.target.value });
+    // Validation
+    let emailIsValid = validateEmail(e.target.value);
+    let selectIsValid = this.state.selectValue.length > 0;
+    this.setState({ entryIsValid: [emailIsValid, selectIsValid].every(truthy => truthy) });
+  }
+
+  changeSelectText = e => {
+    let option = e.target.options[e.target.selectedIndex];
+    this.setState({
+      selectLabel: option.label,
+      selectValue: option.value,
+      selectTouched: true
+    });
+    // Validation
+    let emailIsValid = validateEmail(this.state.emailAddress);
+    let selectIsValid = option.value.length > 0;
+    this.setState({ entryIsValid: [emailIsValid, selectIsValid].every(truthy => truthy) });
   }
 
   componentDidMount() {
@@ -265,87 +445,122 @@ export default class EchowingsWidget extends Component {
 
   handleScroll(e) {
     let scrollTop = e.srcElement.body.scrollTop;
+    let windowHeight = window.innerHeight;
+
     this.setState({
-      showDownArrow: scrollTop < window.innerHeight/2 ? true : false
+      showDownArrow: scrollTop < windowHeight/2 ? true : false,
+      showUpArrow: scrollTop > windowHeight*2 - windowHeight*.5 ? true : false
     });
   }
 
-  render() {
-
-    const statefulStyle = vudu({
-      select: {
-        color: this.state.selectTouched ? 'red' : 'silver'
-      }
+  renderOptions() {
+    return SELECT_OPTIONS.map((item, index) => {
+      return <option key={index} value={item.value} label={item.label}></option>
     });
+  }
 
+  renderError(key, errors) {
+    if (errors[key]) { return <div>{`${capitalize(key)} ${errors[key][0]}.`}</div>; }
+  }
+
+  renderActionPanel() {
+    if (this.props.didSubmitWing) {
+      return (
+        <div className={styles.center}>
+          <h1 className={styles.title}>{'Submitted.'}</h1>
+          <a href={tweetLink} target='_blank'><p className={styles.textLink}>{'Tweet about Echowings.'}</p></a>
+        </div>
+      );
+    }
     return (
-      <div className={styles.wrapper}>
-        <div className={styles.bg}></div>
-        <div className={styles.content}>
-          <div className={styles.panel}>
-            <div className={styles.container}>
-              <h1 className={styles.title}>
-                <span>{'Break out of your'}</span><br />
-                <span>{'echo chamber'}</span>
-              </h1>
-              <p>{'Echowings uses Natural Language Processing to interpret the sentiment of 82,183 Twitter users (and counting) directly following the 2016 US Presidential Election. It uses this dataset to send monthly suggestions for accounts with an opposing political leaning to your own.'}</p>
-            </div>
-          </div>
-          <Element name="signup">
+      <form className={styles.actionBar} onSubmit={this.submitWing}>
+        <label>{'My email is:'}</label>
+
+        <input className={styles.input} type='text' placeholder={'me@example.com'} onChange={this.changeEmail} />
+        {this.renderError('email', this.props.errors)}
+
+        <label>{'My political leaning is:'}</label>
+        <div className={styles.select}>
+          <span className={styles.selectLabel}>{this.state.selectLabel}</span>
+          <select onChange={this.changeSelectText}>
+            {this.renderOptions()}
+          </select>
+          <img src={selectarrow} />
+        </div>
+        {this.renderError('polarity', this.props.errors)}
+
+        <div className={styles.center}>
+          <button
+            className={this.state.entryIsValid ? styles.validButton : styles.invalidButton}
+            type='submit'>
+            {this.props.isLoading ? 'Submitting...' : 'I want to “get” America'}
+          </button>
+        </div>
+      </form>
+    );
+  }
+
+  render() {
+    return (
+      <Element name="top">
+        <div className={styles.wrapper}>
+          <div className={styles.bg}></div>
+          <div className={styles.content}>
             <div className={styles.panel}>
-              <div className={styles.container}>
-                <form className={styles.actionBar}>
-                  <label>{'My email is:'}</label>
-                  <input type='text' placeholder={'me@example.com'} />
-                  <label>{'My political leaning is:'}</label>
-                  <div className={styles.select}>
-                    <span className={statefulStyle.select}>{this.state.selectValue}</span>
-                    <select onChange={this.changeSelectText}>
-                      <option selected>—</option>
-                      <option>Left-wing Liberal</option>
-                      <option>Right-wing Conservative</option>
-                      <option>Independent</option>
-                    </select>
-                    <img src={selectarrow} />
-                  </div>
-                  <div className={styles.center}>
-                    <button type='submit'>{'I want to “get” America'}</button>
-                  </div>
-                </form>
+              <div>
+                <h1 className={styles.title}>
+                  <span>{'Break out of your'}</span><br />
+                  <span>{'echo chamber'}</span>
+                </h1>
+                <p>{'Echowings uses Natural Language Processing to interpret the sentiment of 82,183 Twitter users (and counting) directly following the 2016 US Presidential Election. It sends monthly suggestions for accounts with an opposing political leaning to your own.'}</p>
               </div>
             </div>
-          </Element>
-          <div className={styles.panel}>
-            <div className={styles.container}>
-              <div className={styles.lastPanel}>
+            <Element name="signup">
+              <div className={styles.panel}>
+                {this.renderActionPanel()}
+              </div>
+            </Element>
+            <div className={styles.panel}>
+              <div>
                 <div className={styles.third}>
-                  <h2><a href='#'>{'A project by Sanctuary Computer.'}</a></h2>
+                  <h2><a href={tweetLink} target='_blank'>{'Tweet Echowings to your Followers'}</a></h2>
                 </div>
                 <div className={styles.third}>
-                  <h2><a href='#'>{'Contribute to Echowings on Github.'}</a></h2>
+                  <h2><a href='https://www.github.com/sanctuarycomputer/echowings' target='_blank'>{'Contribute to Echowings on Github.'}</a></h2>
                 </div>
                 <div className={styles.third}>
-                  <h2><a href='#'>{'A project by NYC’s Sanctuary Computer.'}</a></h2>
+                  <h2><a href='http://www.sanctuary.computer' target='_blank'>{'A project by NYC’s Sanctuary Computer.'}</a></h2>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className={styles.border}>
-          <img className={styles.logo} src={logo} />
-          <h5>
-            <span>Echo</span>
-            <span>Wings</span>
-          </h5>
-        </div>
-        <Link to="signup" smooth={true} duration={500}>
-          {this.state.showDownArrow &&
-            <div className={styles.down}>
-              <img src={down} />
+          <div className={styles.border}>
+            <div className={styles.header}>
+              <img className={styles.logo} src={logo} />
+              <h5>
+                <span>Echo</span>
+                <span>Wings</span>
+              </h5>
             </div>
+            <img className={styles.donkey} src={donkey} />
+            <img className={styles.elephant} src={elephant} />
+          </div>
+          {this.state.showDownArrow &&
+            <Link to="signup" smooth={true} duration={500}>
+              <div className={styles.down}>
+                <img src={down} />
+              </div>
+            </Link>
           }
-        </Link>
-      </div>
+          {this.state.showUpArrow &&
+            <Link to="top" smooth={true} duration={500}>
+              <div onClick={this.scrollToTop.bind(this)} className={styles.down}>
+                <img className={styles.flip} src={down} />
+              </div>
+            </Link>
+          }
+        </div>
+      </Element>
     );
   }
 }
