@@ -8,6 +8,29 @@ import woff from '../../../../assets/Tramuntana-Heavy.woff';
 import ttf from '../../../../assets/Tramuntana-Heavy.ttf';
 import vudu from 'vudu';
 
+const tweetLink = "https://twitter.com/home?status=I'm%20getting%20to%20know%20america%20via%20https%3A//www.echowings.org%20%23echowings";
+
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function validateEmail(email) {
+  let re = /(.+)@(.+){2,}\.(.+){2,}/;
+  return re.test(email);
+}
+
+const type = {
+  letterSpacing: '1px',
+  fontWeight: '300',
+  lineHeight: '1.8rem'
+}
+
+const buttonType = {
+  letterSpacing: '1px',
+  fontWeight: '600',
+  fontSize: '14px'
+}
+
 const Tramuntana = vudu.addFontFace({
   fontFamily: 'Tramuntana',
   src: `url(assets/${woff2}) format("woff2"),
@@ -25,6 +48,24 @@ const styles = vudu({
   wrapper: {
     fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
     '*': { boxSizing: 'border-box' }
+  },
+  textLink: {
+    color: 'white'
+  },
+  input: {
+    outline: 'none',
+    '@composes': [type]
+  },
+  selectLabel: {
+    '@composes': [type]
+  },
+  validButton: {
+    pointerEvents: 'auto',
+    '@composes': [c.bgWhite]
+  },
+  invalidButton: {
+    pointerEvents: 'none',
+    opacity: '0.4'
   },
   bg: {
     height: '100%',
@@ -141,10 +182,7 @@ const styles = vudu({
       c.z1,
     ],
     'p': {
-      lineHeight: '1.6',
-      '@composes': [
-        c.mdCol6,
-      ]
+      '@composes': [c.mdCol6, type]
     },
     [md]: {
       paddingTop: 0
@@ -200,16 +238,17 @@ const styles = vudu({
       ]
     },
     'button': {
+      outline: 'none',
       border: 0,
       fontFamily: 'inherit',
       cursor: 'pointer',
+      transition: '1s opacity',
       '@composes': [
-        c.bgWhite,
         c.py2,
         c.px4,
         c.mt5,
         c.caps,
-        c.h3
+        buttonType
       ]
     }
   },
@@ -237,18 +276,18 @@ const styles = vudu({
     '@composes': [ c.center ]
   },
   lastPanel: {
+    textAlign: 'center',
     '@composes': [ c.col12 ]
   },
   third: {
     '@composes': [
       c.left,
       c.mdCol4,
-
     ],
     'h2': {
       fontFamily: '"Tramuntana", serif',
       letterSpacing: '.05em',
-      '@composes': [ c.pr5 ]
+      padding: '0rem 2rem'
     },
     'a': {
       '@composes': [ c.white ]
@@ -300,7 +339,8 @@ export default class EchowingsWidget extends Component {
       selectLabel: SELECT_OPTIONS[0].label,
       selectValue: SELECT_OPTIONS[0].value,
       selectTouched: false,
-      emailAddress: ''
+      emailAddress: '',
+      entryIsValid: false
     }
   }
 
@@ -309,8 +349,18 @@ export default class EchowingsWidget extends Component {
     this.props.submitWing(this.state.emailAddress, this.state.selectValue);
   }
 
+  validateInputs = () => {
+    let emailIsValid = validateEmail(this.state.emailAddress);
+    let selectIsValid = this.state.selectValue.length > 0;
+    this.setState({ entryIsValid: [emailIsValid, selectIsValid].every(truthy => truthy) });
+  }
+
   changeEmail = e => {
     this.setState({ emailAddress: e.target.value });
+    // Validation
+    let emailIsValid = validateEmail(e.target.value);
+    let selectIsValid = this.state.selectValue.length > 0;
+    this.setState({ entryIsValid: [emailIsValid, selectIsValid].every(truthy => truthy) });
   }
 
   changeSelectText = e => {
@@ -320,6 +370,10 @@ export default class EchowingsWidget extends Component {
       selectValue: option.value,
       selectTouched: true
     });
+    // Validation
+    let emailIsValid = validateEmail(this.state.emailAddress);
+    let selectIsValid = option.value.length > 0;
+    this.setState({ entryIsValid: [emailIsValid, selectIsValid].every(truthy => truthy) });
   }
 
   renderOptions() {
@@ -328,53 +382,76 @@ export default class EchowingsWidget extends Component {
     });
   }
 
-  render() {
-    const statefulStyle = vudu({
-      select: {
-        color: this.state.selectTouched ? 'red' : 'silver'
-      }
-    });
+  renderError(key, errors) {
+    if (errors[key]) { return <div>{`${capitalize(key)} ${errors[key][0]}.`}</div>; }
+  }
 
+  renderActionPanel() {
+    if (this.props.didSubmitWing) {
+      return (
+        <div>
+          <h1 className={styles.title}>{'Submitted.'}</h1>
+          <a href={tweetLink} target='_blank'><p className={styles.textLink}>{'Tweet about Echowings.'}</p></a>
+        </div>
+      );
+    }
+    return (
+      <form className={styles.actionBar} onSubmit={this.submitWing}>
+        <label>{'My email is:'}</label>
+
+        <input className={styles.input} type='text' placeholder={'me@example.com'} onChange={this.changeEmail} />
+        {this.renderError('email', this.props.errors)}
+
+        <label>{'My political leaning is:'}</label>
+        <div className={styles.select}>
+          <span className={styles.selectLabel}>{this.state.selectLabel}</span>
+          <select onChange={this.changeSelectText}>
+            {this.renderOptions()}
+          </select>
+          <img src={selectarrow} />
+        </div>
+        {this.renderError('polarity', this.props.errors)}
+
+        <div className={styles.center}>
+          <button
+            className={this.state.entryIsValid ? styles.validButton : styles.invalidButton}
+            type='submit'>
+            {this.props.isLoading ? 'Submitting...' : 'I want to “get” America'}
+          </button>
+        </div>
+      </form>
+    );
+  }
+
+  render() {
     return (
       <div className={styles.wrapper}>
         <div className={styles.bg}></div>
         <div className={styles.content}>
           <div className={styles.panel}>
             <div>
-            <h1 className={styles.title}>
-              <span>{'Break out of your'}</span><br />
-              <span>{'echo chamber'}</span>
-            </h1>
-            <p>{'Echowings uses Natural Language Processing to interpret the sentiment of 82,183 Twitter users (and counting) directly following the 2016 US Presidential Election.  As a means of diversifying your “political echo chamber”, Echowings uses this dataset to send monthly suggestions for accounts with an opposing political leaning to your own.'}</p>
+              <h1 className={styles.title}>
+                <span>{'Break out of your'}</span><br />
+                <span>{'echo chamber'}</span>
+              </h1>
+              <p>
+                {`Echowings uses basic Machine Learning to interpret the sentiment of ${this.props.totalTweets} Tweets (and counting) directly following the 2016 US Presidential Election.  As a means of diversifying your “political echo chamber”, Echowings uses this dataset to send monthly suggestions for accounts with an opposing political leaning to your own.`}
+              </p>
             </div>
           </div>
           <div className={styles.panel}>
-            <form className={styles.actionBar} onSubmit={this.submitWing}>
-              <label>{'My email is:'}</label>
-              <input type='text' placeholder={'me@example.com'} onChange={this.changeEmail} />
-              <label>{'My political leaning is:'}</label>
-              <div className={styles.select}>
-                <span className={statefulStyle.select}>{this.state.selectLabel}</span>
-                <select onChange={this.changeSelectText}>
-                  {this.renderOptions()}
-                </select>
-                <img src={selectarrow} />
-              </div>
-              <div className={styles.center}>
-                <button type='submit'>{'I want to “get” America'}</button>
-              </div>
-            </form>
+            {this.renderActionPanel()}
           </div>
           <div className={styles.panel}>
             <div className={styles.lastPanel}>
               <div className={styles.third}>
-                <h2><a href='#'>{'A project by Sanctuary Computer.'}</a></h2>
+                <h2><a href={tweetLink} target='_blank'>{'Tweet Echowings to your Followers'}</a></h2>
               </div>
               <div className={styles.third}>
-                <h2><a href='#'>{'Contribute to Echowings on Github.'}</a></h2>
+                <h2><a href='https://www.github.com/sanctuarycomputer/echowings' target='_blank'>{'Contribute to Echowings on Github.'}</a></h2>
               </div>
               <div className={styles.third}>
-                <h2><a href='#'>{'A project by NYC’s Sanctuary Computer.'}</a></h2>
+                <h2><a href='http://www.sanctuary.computer' target='_blank'>{'A project by NYC’s Sanctuary Computer.'}</a></h2>
               </div>
             </div>
           </div>

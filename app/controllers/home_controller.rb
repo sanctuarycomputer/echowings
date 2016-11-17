@@ -2,7 +2,7 @@ class HomeController < ApplicationController
   skip_before_filter :verify_authenticity_token, only: :wings
 
   def index
-    @hello_world_props = { name: "Stranger" }
+    @props = { totalTweets: 10294 }
   end
 
   def debug

@@ -12,4 +12,19 @@ class TwitterUser < ApplicationRecord
     self.overall_probability = (tweets.map(&:probability).reduce(:+) / tweets.count)
     self.save
   end
+
+  def display_percentage
+    (overall_probability * 100).to_int
+  end
+
+  def display_polarity
+    case overall_sentiment.to_sym
+    when :neutral
+      "Independent"
+    when :negative
+      "Left-wing Liberal"
+    when :positive
+      "Right-wing Conservative"
+    end
+  end
 end
