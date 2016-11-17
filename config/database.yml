@@ -6,3 +6,7 @@ default: &default
 development:
   <<: *default
   database: echowings_development
+
+production:
+  <<: *default
+  database: echowings_production
