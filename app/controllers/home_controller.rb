@@ -18,6 +18,11 @@ class HomeController < ApplicationController
     end
   end
 
+  def letsencrypt
+    render plain: Rails.application.secrets[:letsencrypt_challenge]
+  end
+
+  private
   def wings_params
     params.require(:home).permit(:email, :polarity)
   end
