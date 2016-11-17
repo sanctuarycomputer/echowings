@@ -255,16 +255,18 @@ export default class EchowingsWidget extends Component {
     }
   }
 
-  changeSelectText(e) {
-    this.setState({
-      selectValue: e.target.value,
-      selectTouched: true
-    });
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll.bind(this));
   }
 
-  handleDownArrow() {
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll.bind(this));
+  }
+
+  handleScroll(e) {
+    let scrollTop = e.srcElement.body.scrollTop;
     this.setState({
-      showDownArrow: this.state.showDownArrow ? false : true
+      showDownArrow: scrollTop < window.innerHeight/2 ? true : false
     });
   }
 
@@ -286,7 +288,7 @@ export default class EchowingsWidget extends Component {
                 <span>{'Break out of your'}</span><br />
                 <span>{'echo chamber'}</span>
               </h1>
-              <p>{'Echowings uses Natural Language Processing to interpret the sentiment of 82,183 Twitter users (and counting) directly following the 2016 US Presidential Election.  As a means of diversifying your “political echo chamber”, Echowings uses this dataset to send monthly suggestions for accounts with an opposing political leaning to your own.'}</p>
+              <p>{'Echowings uses Natural Language Processing to interpret the sentiment of 82,183 Twitter users (and counting) directly following the 2016 US Presidential Election. It uses this dataset to send monthly suggestions for accounts with an opposing political leaning to your own.'}</p>
             </div>
           </div>
           <Element name="signup">
