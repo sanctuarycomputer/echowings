@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import vudu from 'vudu';
 
+// This Confetti code was React-ified from here: https://codepen.io/linrock/pen/Amdhr
 const NUM_CONFETTI = 350;
 const COLORS = [[255, 0, 0], [255, 255, 255], [0, 0, 255]];
 const PI_2 = 2*Math.PI;
