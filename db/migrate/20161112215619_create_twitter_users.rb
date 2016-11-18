@@ -3,6 +3,9 @@ class CreateTwitterUsers < ActiveRecord::Migration[5.0]
     create_table :twitter_users do |t|
       t.string :twitter_user_id
       t.string :twitter_screen_name
+      t.string :twitter_name
+      t.string :twitter_description
+      t.string :twitter_profile_image_url
       t.integer :overall_sentiment
       t.decimal :overall_probability
       t.integer :tweets_count
