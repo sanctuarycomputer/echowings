@@ -1,6 +1,21 @@
 import React, { Component, PropTypes } from 'react';
 import vudu from 'vudu';
 
+function debounce(func, wait, immediate) {
+	let timeout;
+	return function() {
+		let context = this, args = arguments;
+		let later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		let callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
+
 // This Confetti code was React-ified from here: https://codepen.io/linrock/pen/Amdhr
 const NUM_CONFETTI = 350;
 const COLORS = [[255, 0, 0], [255, 255, 255], [0, 0, 255]];
@@ -70,7 +85,7 @@ export default class ConfettiLayer extends Component {
     this.h = 0;
     this.allConfetti = [];
 
-    window.addEventListener('resize', this.windowDidResize, false);
+    window.addEventListener('resize', debounce(this.windowDidResize, 1000), false);
     this.windowDidResize();
 
     times(NUM_CONFETTI)(() => this.allConfetti.push(new Confetti(this.w, this.h, this.context)));

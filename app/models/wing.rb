@@ -1,5 +1,5 @@
 class Wing < ApplicationRecord
-  validates :email, email: true
+  validates :email, email: true, uniqueness: true
   validates_presence_of :polarity
 
   enum polarity: {
