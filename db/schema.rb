@@ -37,11 +37,14 @@ ActiveRecord::Schema.define(version: 20161113221909) do
   create_table "twitter_users", force: :cascade do |t|
     t.string   "twitter_user_id"
     t.string   "twitter_screen_name"
+    t.string   "twitter_name"
+    t.string   "twitter_description"
+    t.string   "twitter_profile_image_url"
     t.integer  "overall_sentiment"
     t.decimal  "overall_probability"
     t.integer  "tweets_count"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.index ["twitter_user_id"], name: "index_twitter_users_on_twitter_user_id", unique: true, using: :btree
   end
 
@@ -50,6 +53,7 @@ ActiveRecord::Schema.define(version: 20161113221909) do
     t.integer  "polarity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_wings_on_email", unique: true, using: :btree
   end
 
   add_foreign_key "tweets", "twitter_users"

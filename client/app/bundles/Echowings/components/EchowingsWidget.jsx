@@ -195,7 +195,7 @@ const styles = vudu({
     ],
     'p': {
       '@composes': [
-        c.mdCol6, 
+        c.mdCol6,
         type
       ]
     },
@@ -302,9 +302,9 @@ const styles = vudu({
       fontFamily: '"Tramuntana", serif',
       letterSpacing: '.05em',
       padding: 0,
-      '@composes': [ 
-        c.mt0, 
-        c.mb5 
+      '@composes': [
+        c.mt0,
+        c.mb5
       ],
       [md]: {
         padding: '0 2rem',
@@ -460,7 +460,7 @@ export default class EchowingsWidget extends Component {
   }
 
   renderError(key, errors) {
-    if (errors[key]) { return <div>{`${capitalize(key)} ${errors[key][0]}.`}</div>; }
+    if (errors[key]) { return <p>{`${capitalize(key)} ${errors[key][0]}.`}</p>; }
   }
 
   renderActionPanel() {
@@ -512,7 +512,7 @@ export default class EchowingsWidget extends Component {
                   <span>{'Break out of your'}</span><br />
                   <span>{'echo chamber'}</span>
                 </h1>
-                <p>{'Echowings uses Natural Language Processing to interpret the sentiment of 82,183 Twitter users (and counting) directly following the 2016 US Presidential Election. It sends monthly suggestions for accounts with an opposing political leaning to your own.'}</p>
+                <p>{`Echowings uses basic Machine Learning to interpret the sentiment of ${this.props.totalTweets} tweets (and counting) published directly following the 2016 US Presidential Election. Sign up to recieve monthly suggestions for accounts with an opposing political leaning to your own.`}</p>
               </div>
             </div>
             <Element name="signup">

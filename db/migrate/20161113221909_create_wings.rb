@@ -6,5 +6,6 @@ class CreateWings < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+    add_index :wings, :email, unique: true
   end
 end

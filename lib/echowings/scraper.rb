@@ -10,21 +10,28 @@ class Echowings::Scraper
       # Get newest Scrape
       scrape = Scrape.order("created_at").last
 
-      # Load 100 Tweets mentioning Term
       tweets = if scrape
-                 client.search("#{term} #{query_tail}", max_id: scrape.max_id, lang: "en", count: 100)
+                 client.search("#{term} #{query_tail}", max_id: (scrape.max_id - 1), lang: "en", count: 14)
                else
-                 client.search("#{term} #{query_tail}", lang: "en", count: 100)
+                 client.search("#{term} #{query_tail}", lang: "en", count: 14)
                end
 
-      # Create a Scrape Record
-      Scrape.create! max_id: tweets.attrs[:search_metadata][:max_id]
 
-      tweets.each do |tweet|
-        twitter_user = TwitterUser.where(twitter_user_id: tweet.user.id, twitter_screen_name: tweet.user.screen_name).first_or_create
+      # Create a Scrape Record
+      Scrape.create! max_id: tweets.attrs[:statuses].last[:id]
+
+      tweets.attrs[:statuses].each do |tweet|
+        # Ensure User exists
+        twitter_user = TwitterUser.where({
+          twitter_user_id:           tweet[:user][:id],
+          twitter_screen_name:       tweet[:user][:screen_name],
+          twitter_name:              tweet[:user][:name],
+          twitter_description:       tweet[:user][:description],
+          twitter_profile_image_url: tweet[:user][:profile_image_url_https]
+        }).first_or_create
+
         # Get more Tweets from that User
-        client.search("from:#{tweet.user.screen_name} AND #{query_tail}", count: 100).each do |tweet|
-          # Ensure Twitter User record exists
+        client.search("from:#{tweet[:user][:screen_name]} AND #{query_tail}", count: 100).each do |tweet|
           # Build Tweets!
           new_tweet = Tweet.where({
             posted_at: tweet.created_at,
