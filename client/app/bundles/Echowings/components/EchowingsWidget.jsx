@@ -2,11 +2,17 @@ import React, { Component, PropTypes } from 'react';
 import flag from '../../../../assets/flag.gif';
 import logo from '../../../../assets/logo.svg';
 import down from '../../../../assets/down.svg';
+import donkey from '../../../../assets/donkey.svg';
+import elephant from '../../../../assets/elephant.svg';
 import selectarrow from '../../../../assets/selectarrow.svg';
 import woff2 from '../../../../assets/Tramuntana-Heavy.woff2';
 import woff from '../../../../assets/Tramuntana-Heavy.woff';
 import ttf from '../../../../assets/Tramuntana-Heavy.ttf';
 import vudu from 'vudu';
+import Scroll from 'react-scroll';
+
+const Link = Scroll.Link;
+const Element = Scroll.Element;
 
 const tweetLink = "https://twitter.com/home?status=I'm%20getting%20to%20know%20america%20via%20https%3A//www.echowings.org%20%23echowings";
 
@@ -23,13 +29,19 @@ const type = {
   letterSpacing: '1px',
   fontWeight: '300',
   lineHeight: '1.8rem'
-}
+};
 
 const buttonType = {
   letterSpacing: '1px',
   fontWeight: '600',
-  fontSize: '14px'
-}
+  fontSize: '14px',
+  width: '100%'
+};
+
+const vertCenter = {
+  top: '50%',
+  transform: 'translateY(-50%)'
+};
 
 const Tramuntana = vudu.addFontFace({
   fontFamily: 'Tramuntana',
@@ -42,7 +54,7 @@ const Tramuntana = vudu.addFontFace({
 
 const c = vudu.atomics;
 
-const md = '@media (min-width: 48em)';
+const md = '@media (min-width: 54em)';
 
 const styles = vudu({
   wrapper: {
@@ -182,7 +194,10 @@ const styles = vudu({
       c.z1,
     ],
     'p': {
-      '@composes': [c.mdCol6, type]
+      '@composes': [
+        c.mdCol6, 
+        type
+      ]
     },
     [md]: {
       paddingTop: 0
@@ -192,8 +207,9 @@ const styles = vudu({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderBottom: '1px solid rgba(255,255,255,.75)',
     padding: '6rem 0',
+    maxWidth: '64rem',
+    '@composes': [ c.mxAuto ],
     [md]: {
       height: '100vh',
       padding: 0
@@ -249,7 +265,10 @@ const styles = vudu({
         c.mt5,
         c.caps,
         buttonType
-      ]
+      ],
+      [md]: {
+        width: 'auto'
+      }
     }
   },
   select: {
@@ -263,21 +282,16 @@ const styles = vudu({
       c.col12
     ],
     'img': {
-      marginTop: '1.25rem',
       '@composes': [
         c.absolute,
         c.right0,
         c.top0,
-        c.mx3,
+        c.m3,
       ]
     }
   },
   center: {
     '@composes': [ c.center ]
-  },
-  lastPanel: {
-    textAlign: 'center',
-    '@composes': [ c.col12 ]
   },
   third: {
     '@composes': [
@@ -287,7 +301,15 @@ const styles = vudu({
     'h2': {
       fontFamily: '"Tramuntana", serif',
       letterSpacing: '.05em',
-      padding: '0rem 2rem'
+      padding: 0,
+      '@composes': [ 
+        c.mt0, 
+        c.mb5 
+      ],
+      [md]: {
+        padding: '0 2rem',
+        margin: 0
+      }
     },
     'a': {
       '@composes': [ c.white ]
@@ -310,6 +332,37 @@ const styles = vudu({
     [md]: {
       display: 'block'
     }
+  },
+  donkey: {
+    display: 'none',
+    '@composes': [
+      vertCenter,
+      c.absolute,
+      c.left0,
+      c.mx3,
+    ],
+    [md]: {
+      '@composes': [
+        c.block
+      ]
+    }
+  },
+  elephant: {
+    display: 'none',
+    '@composes': [
+      vertCenter,
+      c.absolute,
+      c.right0,
+      c.mx3,
+    ],
+    [md]: {
+      '@composes': [
+        c.block
+      ]
+    }
+  },
+  flip: {
+    transform: 'rotate(180deg)'
   }
 });
 
@@ -340,8 +393,14 @@ export default class EchowingsWidget extends Component {
       selectValue: SELECT_OPTIONS[0].value,
       selectTouched: false,
       emailAddress: '',
-      entryIsValid: false
+      entryIsValid: false,
+      showDownArrow: true,
+      showUpArrow: false,
     }
+  }
+
+  scrollToTop() {
+    scroll.scrollTo(100);
   }
 
   submitWing = e => {
@@ -376,6 +435,24 @@ export default class EchowingsWidget extends Component {
     this.setState({ entryIsValid: [emailIsValid, selectIsValid].every(truthy => truthy) });
   }
 
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll.bind(this));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll.bind(this));
+  }
+
+  handleScroll(e) {
+    let scrollTop = e.srcElement.body.scrollTop;
+    let windowHeight = window.innerHeight;
+
+    this.setState({
+      showDownArrow: scrollTop < windowHeight/2 ? true : false,
+      showUpArrow: scrollTop > windowHeight*2 - windowHeight*.5 ? true : false
+    });
+  }
+
   renderOptions() {
     return SELECT_OPTIONS.map((item, index) => {
       return <option key={index} value={item.value} label={item.label}></option>
@@ -389,7 +466,7 @@ export default class EchowingsWidget extends Component {
   renderActionPanel() {
     if (this.props.didSubmitWing) {
       return (
-        <div>
+        <div className={styles.center}>
           <h1 className={styles.title}>{'Submitted.'}</h1>
           <a href={tweetLink} target='_blank'><p className={styles.textLink}>{'Tweet about Echowings.'}</p></a>
         </div>
@@ -425,50 +502,65 @@ export default class EchowingsWidget extends Component {
 
   render() {
     return (
-      <div className={styles.wrapper}>
-        <div className={styles.bg}></div>
-        <div className={styles.content}>
-          <div className={styles.panel}>
-            <div>
-              <h1 className={styles.title}>
-                <span>{'Break out of your'}</span><br />
-                <span>{'echo chamber'}</span>
-              </h1>
-              <p>
-                {`Echowings uses basic Machine Learning to interpret the sentiment of ${this.props.totalTweets} Tweets (and counting) directly following the 2016 US Presidential Election.  As a means of diversifying your “political echo chamber”, Echowings uses this dataset to send monthly suggestions for accounts with an opposing political leaning to your own.`}
-              </p>
-            </div>
-          </div>
-          <div className={styles.panel}>
-            {this.renderActionPanel()}
-          </div>
-          <div className={styles.panel}>
-            <div className={styles.lastPanel}>
-              <div className={styles.third}>
-                <h2><a href={tweetLink} target='_blank'>{'Tweet Echowings to your Followers'}</a></h2>
-              </div>
-              <div className={styles.third}>
-                <h2><a href='https://www.github.com/sanctuarycomputer/echowings' target='_blank'>{'Contribute to Echowings on Github.'}</a></h2>
-              </div>
-              <div className={styles.third}>
-                <h2><a href='http://www.sanctuary.computer' target='_blank'>{'A project by NYC’s Sanctuary Computer.'}</a></h2>
+      <Element name="top">
+        <div className={styles.wrapper}>
+          <div className={styles.bg}></div>
+          <div className={styles.content}>
+            <div className={styles.panel}>
+              <div>
+                <h1 className={styles.title}>
+                  <span>{'Break out of your'}</span><br />
+                  <span>{'echo chamber'}</span>
+                </h1>
+                <p>{'Echowings uses Natural Language Processing to interpret the sentiment of 82,183 Twitter users (and counting) directly following the 2016 US Presidential Election. It sends monthly suggestions for accounts with an opposing political leaning to your own.'}</p>
               </div>
             </div>
+            <Element name="signup">
+              <div className={styles.panel}>
+                {this.renderActionPanel()}
+              </div>
+            </Element>
+            <div className={styles.panel}>
+              <div>
+                <div className={styles.third}>
+                  <h2><a href={tweetLink} target='_blank'>{'Tweet Echowings to your Followers'}</a></h2>
+                </div>
+                <div className={styles.third}>
+                  <h2><a href='https://www.github.com/sanctuarycomputer/echowings' target='_blank'>{'Contribute to Echowings on Github.'}</a></h2>
+                </div>
+                <div className={styles.third}>
+                  <h2><a href='http://www.sanctuary.computer' target='_blank'>{'A project by NYC’s Sanctuary Computer.'}</a></h2>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className={styles.border}>
-          <div className={styles.header}>
-            <img className={styles.logo} src={logo} />
-            <h5>
-              <span>Echo</span>
-              <span>Wings</span>
-            </h5>
+          <div className={styles.border}>
+            <div className={styles.header}>
+              <img className={styles.logo} src={logo} />
+              <h5>
+                <span>Echo</span>
+                <span>Wings</span>
+              </h5>
+            </div>
+            <img className={styles.donkey} src={donkey} />
+            <img className={styles.elephant} src={elephant} />
           </div>
+          {this.state.showDownArrow &&
+            <Link to="signup" smooth={true} duration={500}>
+              <div className={styles.down}>
+                <img src={down} />
+              </div>
+            </Link>
+          }
+          {this.state.showUpArrow &&
+            <Link to="top" smooth={true} duration={500}>
+              <div onClick={this.scrollToTop.bind(this)} className={styles.down}>
+                <img className={styles.flip} src={down} />
+              </div>
+            </Link>
+          }
         </div>
-        <div className={styles.down}>
-          <img src={down} />
-        </div>
-      </div>
+      </Element>
     );
   }
 }

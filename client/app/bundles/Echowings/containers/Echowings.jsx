@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import EchowingsWidget from '../components/EchowingsWidget';
+import ConfettiLayer from '../components/ConfettiLayer';
 
 function handleResponse(response) {
   const { status, statusText } = response;
@@ -24,7 +25,7 @@ function submitWing(email, polarity) {
 
 export default class HelloWorld extends Component {
   static propTypes = {
-    totalTweets: PropTypes.string.isRequired, // this is passed from the Rails view
+    totalTweets: PropTypes.number.isRequired, // this is passed from the Rails view
   };
 
   constructor(props) {
@@ -45,12 +46,15 @@ export default class HelloWorld extends Component {
 
   render() {
     return (
-      <EchowingsWidget
-        totalTweets={this.props.totalTweets}
-        submitWing={this.submitWing}
-        errors={this.state.errors}
-        isLoading={this.state.isLoading}
-        didSubmitWing={this.state.didSubmitWing} />
+      <div>
+        <ConfettiLayer visible={this.state.didSubmitWing} />
+        <EchowingsWidget
+          totalTweets={this.props.totalTweets}
+          submitWing={this.submitWing}
+          errors={this.state.errors}
+          isLoading={this.state.isLoading}
+          didSubmitWing={this.state.didSubmitWing} />
+      </div>
     );
   }
 }
