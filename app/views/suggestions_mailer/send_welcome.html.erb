@@ -1,0 +1,5 @@
+<% @suggestions.each do |twitter_user| %>
+  <a href="https://twitter.com/<%= twitter_user.twitter_screen_name %>">
+    <h1>We're <%= twitter_user.display_percentage %> that <%= twitter_user.twitter_screen_name %> is <%= twitter_user.display_polarity %></h1>
+  </a>
+<% end %>
