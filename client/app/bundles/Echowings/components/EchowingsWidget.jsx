@@ -512,7 +512,7 @@ export default class EchowingsWidget extends Component {
                   <span>{'Break out of your'}</span><br />
                   <span>{'echo chamber'}</span>
                 </h1>
-                <p>{`Echowings uses basic Machine Learning to interpret the sentiment of ${this.props.totalTweets} tweets (and counting) published directly following the 2016 US Presidential Election. Sign up to recieve monthly suggestions for accounts with an opposing political leaning to your own.`}</p>
+                <p>{`Echowings uses basic Machine Learning to interpret the sentiment of ${this.props.totalTweets} tweets (and counting) published directly following the 2016 US Presidential Election. Sign up to receive monthly suggestions for accounts with an opposing political leaning to your own.`}</p>
               </div>
             </div>
             <Element name="signup">
