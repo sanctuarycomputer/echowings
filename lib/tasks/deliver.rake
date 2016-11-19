@@ -5,4 +5,9 @@ namespace :echowings do
       SuggestionsMailer.send_suggestions(wing).deliver
     end
   end
+
+  desc "Scrape next page of tweets"
+  task scrape: :environment do
+    Echowings::Scraper.perform
+  end
 end
