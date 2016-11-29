@@ -9,16 +9,16 @@ class Echowings::Scraper
     def perform
       # Get newest Scrape
       scrape = Scrape.order("created_at").last
-
+      # Get the latest tweets mentioning America in English
       tweets = if scrape
-                 client.search("#{term} #{query_tail}", max_id: (scrape.max_id - 1), lang: "en", count: 14)
+                 client.search("#{term}&#{query_tail}", lang: 'en', since_id: scrape.max_id, count: 90)
                else
-                 client.search("#{term} #{query_tail}", lang: "en", count: 14)
+                 client.search("#{term}&#{query_tail}", lang: 'en', count: 90)
                end
 
-
+      return if tweets.attrs[:statuses].empty?
       # Create a Scrape Record
-      Scrape.create! max_id: tweets.attrs[:statuses].last[:id]
+      Scrape.create! max_id: tweets.attrs[:statuses].first[:id]
 
       tweets.attrs[:statuses].each do |tweet|
         # Ensure User exists
@@ -30,9 +30,7 @@ class Echowings::Scraper
           twitter_profile_image_url: tweet[:user][:profile_image_url_https]
         }).first_or_create
 
-        # Get more Tweets from that User
-        client.search("from:#{tweet[:user][:screen_name]} AND #{query_tail}", count: 100).each do |tweet|
-          # Build Tweets!
+        post_election_tweets_for_screen_name(twitter_user.twitter_screen_name).each do |tweet|
           new_tweet = Tweet.where({
             posted_at: tweet.created_at,
             text: tweet.text,
@@ -68,12 +66,48 @@ class Echowings::Scraper
       end
     end
 
+    def post_election_tweets_for_screen_name(screen_name)
+      # 100 points for whoever tidies this up
+      election_announced = DateTime.parse("Wed, 09 Nov 2016 02:45:00 EST -05:00")
+      a_day_later        = election_announced + 1.day
+      user_tweets        = []
+      max_id             = nil
+      cycles             = 0
+
+      while true do
+        break if cycles > 15 # 3200 tweets dividied by 200
+
+        new_page = if max_id
+                      client.user_timeline(screen_name, {
+                        max_id: max_id,
+                        count: 200,
+                        exclude_replies: true,
+                        include_rts: false
+                      })
+                    else
+                      client.user_timeline(screen_name, {
+                        count: 200,
+                        exclude_replies: true,
+                        include_rts: false
+                      })
+                    end
+
+        break if new_page.empty?
+        new_tweets_in_window = new_page.select{ |tweet| tweet.created_at > election_announced && tweet.created_at < a_day_later }
+        user_tweets.concat new_tweets_in_window
+        break if new_page.any?{ |tweet| tweet.created_at < election_announced }
+        max_id = new_page.last.id - 1
+        cycles += 1
+      end
+      user_tweets
+    end
+
     def term
       "america"
     end
 
     def query_tail
-      "since:2016-11-09 AND until:2016-11-10 AND -filter:retweets AND -filter:replies AND -filter:links"
+      "-filter:retweets&-filter:replies&-filter:links"
     end
   end
 end
