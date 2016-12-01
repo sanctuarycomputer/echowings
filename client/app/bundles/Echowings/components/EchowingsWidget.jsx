@@ -8,8 +8,9 @@ import selectarrow from '../../../../assets/selectarrow.svg';
 import woff2 from '../../../../assets/Tramuntana-Heavy.woff2';
 import woff from '../../../../assets/Tramuntana-Heavy.woff';
 import ttf from '../../../../assets/Tramuntana-Heavy.ttf';
-import vudu from 'vudu';
 import Scroll from 'react-scroll';
+import Preload from 'repreload';
+import vudu from 'vudu';
 
 const Link = Scroll.Link;
 const Element = Scroll.Element;
@@ -58,6 +59,7 @@ const md = '@media (min-width: 54em)';
 
 const styles = vudu({
   wrapper: {
+    backgroundColor: 'black',
     fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
     '*': { boxSizing: 'border-box' }
   },
@@ -165,6 +167,7 @@ const styles = vudu({
     fontFamily: '"Tramuntana", serif',
     fontSize: '3rem',
     marginTop: '-3rem',
+    lineHeight: '1.2',
     '@composes': [
       c.mb3
     ],
@@ -504,7 +507,9 @@ export default class EchowingsWidget extends Component {
     return (
       <Element name="top">
         <div className={styles.wrapper}>
-          <div className={styles.bg}></div>
+          <Preload src={`assets/${flag}`}>
+            <div className={styles.bg}></div>
+          </Preload>
           <div className={styles.content}>
             <div className={styles.panel}>
               <div>
