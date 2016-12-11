@@ -133,7 +133,7 @@
               <tr>
                 <td class="border-top" style="padding: 20px 0 0;" align="center" valign="top">
                   <h5 style="font-weight: normal;">A project by NYC’s <a href="http://www.sanctuary.computer" target="_blank">Sanctuary Computer</a>.</h5>
-                  <h5 style="font-weight: normal;">Not feeling this? You can <a href="https://www.echowings.org/?unsubscribe=<%= @wing.email %>" target="_blank">Unsubscribe</a>.</h5>
+                  <h5 style="font-weight: normal;">Not feeling this? You can <a href="https://www.echowings.org/?unsubscribe=<%= url_encode(@wing.email) %>" target="_blank">Unsubscribe</a>.</h5>
                 </td>
               </tr>
               <tr height="100"></tr>
