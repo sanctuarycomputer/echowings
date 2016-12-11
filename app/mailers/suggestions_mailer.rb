@@ -1,5 +1,6 @@
 class SuggestionsMailer < ActionMailer::Base
   default from: 'Echowings <hello@echowings.org>'
+  include Roadie::Rails::Automatic
 
   def send_suggestions(wing)
     suggestion_count = 5
