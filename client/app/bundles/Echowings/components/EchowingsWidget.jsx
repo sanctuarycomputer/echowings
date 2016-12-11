@@ -100,7 +100,7 @@ const styles = vudu({
   },
   border: {
     height: '100%',
-    boxShadow: 'inset 0 0 0 0 white',
+    boxShadow: 'inset 0 0 0 0 transparent',
     pointerEvents: 'none',
     '@composes': [
       c.col12,
