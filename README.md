@@ -1,24 +1,28 @@
-# README
+# Echowings
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Echowings uses basic Machine Learning to interpret the sentiment of hundreds of thousands tweets (and counting) published directly following the 2016 US Presidential Election. Sign up to receive monthly suggestions for accounts with an opposing political leaning to your own.
 
-Things you may want to cover:
+#### Getting Running
+```
+# You'll need these ENV Vars
 
-* Ruby version
+export ECHOWINGS_TWITTER_CONSUMER_KEY=foobar
+export ECHOWINGS_TWITTER_CONSUMER_SECRET=foobar
+export ECHOWINGS_TWITTER_ACCESS_TOKEN=foobar
+export ECHOWINGS_TWITTER_ACCESS_TOKEN_SECRET=foobar
+export ECHOWINGS_SENDGRID_USERNAME=foobar
+export ECHOWINGS_SENDGRID_PASSWORD=foobar
+export ECHOWINGS_LETSENCRYPT_CHALLENGE=foobar
+```
 
-* System dependencies
+##### Then run these commands:
+```
+git clone https://github.com/sanctuarycomputer/echowings
+cd echowings
+rake db:create
+rake db:migrate
+npm install
+npm run rails-server
+```
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Echowings is released under the MIT License.
