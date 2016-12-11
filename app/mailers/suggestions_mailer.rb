@@ -14,6 +14,7 @@ class SuggestionsMailer < ActionMailer::Base
     when :middle
       @suggestions = TwitterUser.where("tweets_count > ?", 9).order("RANDOM()").limit(suggestion_count)
     end
+    @wing = wing
     mail(to: wing.email, subject: "Echowings: Getting to know America")
   end
 
@@ -29,6 +30,7 @@ class SuggestionsMailer < ActionMailer::Base
     when :middle
       @suggestions = TwitterUser.where("tweets_count > ?", 9).order("RANDOM()").limit(suggestion_count)
     end
+    @wing = wing
     mail(to: wing.email, subject: "Welcome to Echowings!")
   end
 end

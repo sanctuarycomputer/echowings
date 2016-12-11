@@ -2,7 +2,12 @@ class HomeController < ApplicationController
   skip_before_filter :verify_authenticity_token, only: :wings
 
   def index
-    @props = { totalTweets: Tweet.count }
+    if unsubscribe_email.present?
+      Wing.where(email: unsubscribe_email).destroy_all
+      @props = { totalTweets: Tweet.count, didUnsubscribe: true }
+    else
+      @props = { totalTweets: Tweet.count, didUnsubscribe: false }
+    end
   end
 
   def debug
@@ -26,5 +31,9 @@ class HomeController < ApplicationController
   private
   def wings_params
     params.require(:home).permit(:email, :polarity)
+  end
+
+  def unsubscribe_email
+    params['unsubscribe']
   end
 end

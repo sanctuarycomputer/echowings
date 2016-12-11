@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import EchowingsWidget from '../components/EchowingsWidget';
+import UnsubscribeWidget from '../components/UnsubscribeWidget';
 import ConfettiLayer from '../components/ConfettiLayer';
 
 function handleResponse(response) {
@@ -25,7 +26,8 @@ function submitWing(email, polarity) {
 
 export default class HelloWorld extends Component {
   static propTypes = {
-    totalTweets: PropTypes.number.isRequired, // this is passed from the Rails view
+    totalTweets: PropTypes.number, // this is passed from the Rails view
+    didUnsubscribe: PropTypes.bool
   };
 
   constructor(props) {
@@ -45,6 +47,7 @@ export default class HelloWorld extends Component {
   }
 
   render() {
+    if (this.props.didUnsubscribe) { return <UnsubscribeWidget /> }
     return (
       <div>
         <ConfettiLayer visible={this.state.didSubmitWing} />
