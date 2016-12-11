@@ -15,7 +15,7 @@ class SuggestionsMailer < ActionMailer::Base
       @suggestions = TwitterUser.where("tweets_count > ?", 9).order("RANDOM()").limit(suggestion_count)
     end
     @wing = wing
-    mail(to: wing.email, subject: "Echowings: Getting to know America")
+    mail(to: wing.email, subject: "Echowings #{Date.today.strftime("%B %Y")}: Getting to know America")
   end
 
   def send_welcome(wing)
