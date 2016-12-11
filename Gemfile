@@ -12,6 +12,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'turbolinks', '~> 5'
+gem 'roadie-rails', '~> 1.0'
 
 gem 'twitter'
 gem 'sentimental'
