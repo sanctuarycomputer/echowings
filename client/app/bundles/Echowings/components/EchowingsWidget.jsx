@@ -455,7 +455,7 @@ export default class EchowingsWidget extends Component {
 
   renderOptions() {
     return SELECT_OPTIONS.map((item, index) => {
-      return <option key={index} value={item.value} label={item.label}></option>
+      return <option key={index} value={item.value} label={item.label}>{item.label}</option>
     });
   }
 
