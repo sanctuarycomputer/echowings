@@ -9,12 +9,12 @@ class Wing < ApplicationRecord
   }
 
   def display_results
-    case polarity
-    when :neutral
+    case polarity.to_sym
+    when :middle
       "Republicans and Democrats"
-    when :negative
+    when :left
       "Republicans"
-    when :positive
+    when :right
       "Democrats"
     end
   end

@@ -183,6 +183,7 @@ const styles = vudu({
     }
   },
   panel: {
+    minHeight: '600px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
