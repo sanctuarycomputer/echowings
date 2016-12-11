@@ -18,9 +18,10 @@ gem 'roadie-rails', '~> 1.0'
 gem 'twitter'
 gem 'sentimental'
 gem 'sentimentalizer'
+gem 'skylight'
 
 group :development, :test do
-  gem "letter_opener"
+  gem 'letter_opener'
   gem 'pry'
 end
 
