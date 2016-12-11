@@ -17,6 +17,10 @@ class TwitterUser < ApplicationRecord
     (overall_probability * 100).to_int
   end
 
+  def display_image
+    twitter_profile_image_url.split("_normal.").join('.')
+  end
+
   def display_polarity
     case overall_sentiment.to_sym
     when :neutral
@@ -25,6 +29,17 @@ class TwitterUser < ApplicationRecord
       "Left-wing Liberal"
     when :positive
       "Right-wing Conservative"
+    end
+  end
+
+  def polarity_email_class
+    case overall_sentiment.to_sym
+    when :neutral
+      "neutral"
+    when :negative
+      "blue"
+    when :positive
+      "red"
     end
   end
 end

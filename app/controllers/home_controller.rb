@@ -12,6 +12,7 @@ class HomeController < ApplicationController
   def wings
     wing = Wing.create email: params[:email], polarity: params[:polarity].to_sym
     if wing.persisted?
+      SuggestionsMailer.send_welcome(wing).deliver
       render json: { status: :ok }
     else
       render json: { errors: wing.errors }, status: 422

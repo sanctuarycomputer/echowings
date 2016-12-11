@@ -18,6 +18,7 @@ gem 'sentimental'
 gem 'sentimentalizer'
 
 group :development, :test do
+  gem "letter_opener"
   gem 'pry'
 end
 

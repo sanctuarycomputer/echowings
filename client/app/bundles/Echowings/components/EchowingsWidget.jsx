@@ -5,9 +5,6 @@ import down from '../../../../assets/down.svg';
 import donkey from '../../../../assets/donkey.svg';
 import elephant from '../../../../assets/elephant.svg';
 import selectarrow from '../../../../assets/selectarrow.svg';
-import woff2 from '../../../../assets/Tramuntana-Heavy.woff2';
-import woff from '../../../../assets/Tramuntana-Heavy.woff';
-import ttf from '../../../../assets/Tramuntana-Heavy.ttf';
 import Scroll from 'react-scroll';
 import Preload from 'repreload';
 import vudu from 'vudu';
@@ -44,15 +41,6 @@ const vertCenter = {
   transform: 'translateY(-50%)'
 };
 
-const Tramuntana = vudu.addFontFace({
-  fontFamily: 'Tramuntana',
-  src: `url(assets/${woff2}) format("woff2"),
-    url(assets/${woff}) format("woff"),
-    url(assets/${ttf}) format("truetype")`,
-  fontWeight: 'normal',
-  fontStyle: 'normal'
-});
-
 const c = vudu.atomics;
 
 const md = '@media (min-width: 54em)';
@@ -80,6 +68,9 @@ const styles = vudu({
   invalidButton: {
     pointerEvents: 'none',
     opacity: '0.4'
+  },
+  noTextDecoration: {
+    textDecoration: 'none'
   },
   bg: {
     height: '100%',
@@ -186,6 +177,12 @@ const styles = vudu({
       top: '2.25rem',
     }
   },
+  mainDescription: {
+    '@composes': [
+      c.mdCol6,
+      type
+    ]
+  },
   content: {
     paddingTop: '4rem',
     '@composes': [
@@ -197,10 +194,7 @@ const styles = vudu({
       c.z1,
     ],
     'p': {
-      '@composes': [
-        c.mdCol6,
-        type
-      ]
+      '@composes': [type]
     },
     [md]: {
       paddingTop: 0
@@ -471,7 +465,9 @@ export default class EchowingsWidget extends Component {
       return (
         <div className={styles.center}>
           <h1 className={styles.title}>{'Submitted.'}</h1>
-          <a href={tweetLink} target='_blank'><p className={styles.textLink}>{'Tweet about Echowings.'}</p></a>
+          <a href={tweetLink} target='_blank' className={styles.noTextDecoration}>
+            <p className={styles.textLink}>{'Tweet it.'}</p>
+          </a>
         </div>
       );
     }
@@ -517,7 +513,7 @@ export default class EchowingsWidget extends Component {
                   <span>{'Break out of your'}</span><br />
                   <span>{'echo chamber'}</span>
                 </h1>
-                <p>{`Echowings uses basic Machine Learning to interpret the sentiment of ${this.props.totalTweets} tweets (and counting) published directly following the 2016 US Presidential Election. Sign up to receive monthly suggestions for accounts with an opposing political leaning to your own.`}</p>
+                <p className={styles.mainDescription}>{`Echowings uses basic Machine Learning to interpret the sentiment of ${this.props.totalTweets} tweets (and counting) published directly following the 2016 US Presidential Election. Sign up to receive monthly suggestions for accounts with an opposing political leaning to your own.`}</p>
               </div>
             </div>
             <Element name="signup">
@@ -531,7 +527,9 @@ export default class EchowingsWidget extends Component {
                   <h2><a href={tweetLink} target='_blank'>{'Tweet Echowings to your Followers'}</a></h2>
                 </div>
                 <div className={styles.third}>
-                  <h2><a href='https://www.github.com/sanctuarycomputer/echowings' target='_blank'>{'Contribute to Echowings on Github.'}</a></h2>
+                  <h2>
+                    <a href='https://www.github.com/sanctuarycomputer/echowings' target='_blank'>{'Contribute to Echowings on Github.'}</a>
+                  </h2>
                 </div>
                 <div className={styles.third}>
                   <h2><a href='http://www.sanctuary.computer' target='_blank'>{'A project by NYC’s Sanctuary Computer.'}</a></h2>

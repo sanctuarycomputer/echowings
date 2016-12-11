@@ -1,5 +1,146 @@
-<% @suggestions.each do |twitter_user| %>
-  <a href="https://twitter.com/<%= twitter_user.twitter_screen_name %>">
-    <h1>We're <%= twitter_user.display_percentage %> that <%= twitter_user.twitter_screen_name %> is <%= twitter_user.display_polarity %></h1>
-  </a>
-<% end %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="ROBOTS" content="NOINDEX,NOFOLLOW">
+    <title>Echowings</title>
+    <style type="text/css">
+      html, body {
+        background: #ffffff;
+        font-family:'Helvetica Neue', Helvetica, sans-serif;
+        padding: 0;
+        margin: 0;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin: 0 0 6px;
+        font-weight: 500;
+      }
+      a {
+        color: black;
+      }
+      p {
+        margin: 0;
+        line-height: 1.45;
+      }
+      .border-bottom {
+        border-bottom: 3px solid black;
+      }
+      .border-top {
+        border-top: 3px solid black;
+      }
+      .circle {
+        border-radius: 50%;
+        -moz-border-radius: 50%;
+      }
+      .wrapper {
+        width: 100%;
+        max-width: 620px;
+        margin: 0 auto;
+      }
+      .picks {
+        padding: 40px 10px;
+      }
+      .picks a {
+        text-decoration: none;
+      }
+      .avatar {
+        border: 3px solid black;
+      }
+      .blue {
+        color: #1316D6;
+      }
+      .red {
+        color: #D61313;
+      }
+      .neutral {
+        color: #565656;
+      }
+    </style>
+  </head>
+
+  <body>
+    <table class="wrapper" border="0" cellspacing="0" cellpadding="0">
+      <tbody>
+        <tr height="60"></tr>
+        <tr>
+          <td>
+            <table class="pad-bottom" width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td class="border-bottom" style="padding-bottom: 15px;" align="center" valign="top">
+                  <a href="https://www.echowings.org/" target="_blank">
+                    <%= image_tag 'logo.jpg', width: '169' %>
+                  </a>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="border-bottom" style="padding: 50px 30px;" align="center" valign="top">
+                  <img style="width: 100%; max-width: 283px; margin-bottom: 20px;" src="<%= image_path('welcome.jpg') %>" />
+                  <h5 style="margin: 0; width: 75%; line-height: 1.5;">You made it. Each month Echowings will suggest 5 accounts with opposing political leanings. Here are 3 to get you started.</h5>
+                </td>
+              </tr>
+
+              <tr>
+                <td valign="top">
+                  <table class="picks" width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <% @suggestions.each do |twitter_user| %>
+                      <tr>
+                        <td valign="middle" width="125px">
+                          <a style="display: block;" href="https://twitter.com/<%= twitter_user.twitter_screen_name %>" target="_blank">
+                            <div style="width:125px;height:160px;">
+                              <div style="max-height:0;max-width:0;">
+                                <div style="width:125px;height:125px;margin-top:0px;display:inline-block;text-align:center;">
+                                  <img class="avatar circle" width="125" height="125" src="<%= twitter_user.display_image %>" />
+                                </div>
+                              </div>
+                              <div style="max-height:0;max-width:0;">
+                                <div class="<%= twitter_user.polarity_email_class %>" style="width:104px;margin:100px 0 0 13px;padding: 6px 0;display:inline-block;text-align:center;background:#ffffff;border: 1px solid black;">
+                                  <h4 style="margin-bottom: 4px;"><%= twitter_user.display_polarity %></h4>
+                                  <h6 style="margin: 0 0 2px; font-weight: normal"><%= twitter_user.display_percentage %>% accuracy</h6>
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </td>
+                        <td valign="middle" width="85%" style="padding-left: 30px">
+                          <a style="display: block;" href="https://twitter.com/<%= twitter_user.twitter_screen_name %>" target="_blank">
+                            <h6><%= twitter_user.twitter_name %></h6>
+                            <h1>@<%= twitter_user.twitter_screen_name %></h1>
+                            <p><%= twitter_user.twitter_description %></p>
+                          </a>
+                        </td>
+                        <td width="15%"></td>
+                      </tr>
+                      <tr height="20"></tr>
+                    <% end %>
+                  </table>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="border-top" style="padding: 50px 30px;" align="center" valign="top">
+                  <a style="display: inline-block; margin: 0 10px;" href="https://twitter.com/intent/tweet?text=I%27m%20getting%20to%20know%20america%20via%20https%3A%2F%2Fwww.echowings.org%20%23echowings&source=webclient" target="_blank">
+                    <img style="margin: 0; width: 100%; max-width: 145px;" src="<%= image_path('tweet.jpg') %>" />
+                  </a>
+                  <a style="display: inline-block; margin: 0 10px;" href="https://github.com/sanctuarycomputer/echowings" target="_blank">
+                    <img style="margin: 0; width: 100%; max-width: 192px;" src="<%= image_path('contribute.jpg') %>" />
+                  </a>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="border-top" style="padding: 20px 0 0;" align="center" valign="top">
+                  <h5 style="font-weight: normal;">A project by NYC’s <a href="http://www.sanctuary.computer" target="_blank">Sanctuary Computer</a>.</h5>
+                  <h5 style="font-weight: normal;">Not feeling this? You can <a href="" target="_blank">Unsubscribe</a>.</h5>
+                </td>
+              </tr>
+              <tr height="100"></tr>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
