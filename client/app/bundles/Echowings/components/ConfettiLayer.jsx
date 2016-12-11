@@ -17,7 +17,7 @@ function debounce(func, wait, immediate) {
 };
 
 // This Confetti code was React-ified from here: https://codepen.io/linrock/pen/Amdhr
-const NUM_CONFETTI = 350;
+const NUM_CONFETTI = 200;
 const COLORS = [[255, 0, 0], [255, 255, 255], [0, 0, 255]];
 const PI_2 = 2*Math.PI;
 const range = (a, b) => (b - a) * Math.random() + a;
