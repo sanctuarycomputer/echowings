@@ -18,5 +18,4 @@ class Wing < ApplicationRecord
       "Democrats"
     end
   end
-  end
 end
