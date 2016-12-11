@@ -55,6 +55,7 @@ const styles = vudu({
     color: 'white'
   },
   input: {
+    borderRadius: '0px',
     outline: 'none',
     '@composes': [type]
   },
@@ -67,7 +68,8 @@ const styles = vudu({
   },
   invalidButton: {
     pointerEvents: 'none',
-    opacity: '0.4'
+    opacity: '0.4',
+    '@composes': [c.bgWhite]
   },
   noTextDecoration: {
     textDecoration: 'none'
@@ -98,7 +100,7 @@ const styles = vudu({
   },
   border: {
     height: '100%',
-    boxShadow: 'inset 0 0 0 10px white',
+    boxShadow: 'inset 0 0 0 0 white',
     pointerEvents: 'none',
     '@composes': [
       c.col12,
